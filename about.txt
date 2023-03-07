@@ -1,0 +1,53 @@
+1. http://3.92.175.77:3210/admin => GET ==> get all admins 
+
+2. http://3.92.175.77:3210/admin => POST ==> add new admin
+{ fullname, username, password }
+
+3. http://3.92.175.77:3210/admin/:id => GET ==> get one admin
+
+4. http://3.92.175.77:3210/admin/:id => PUT ==> update admin
+
+5.http://3.92.175.77:3210/admin/:id => DELETE ==> delete admin
+
+==================================================================
+
+1. http://3.92.175.77:3210/role =>  GET ==> get all roles
+
+2. http://3.92.175.77:3210/role => POST =>  add new role
+{ name }
+
+3. http://3.92.175.77:3210/role/:id => GET =>  get one Role
+
+4. http://3.92.175.77:3210/role:id => PUT => update role
+
+5. http://3.92.175.77:3210/role:id => DELETE => delete role
+
+===================================================================
+
+1. http://3.92.175.77:3210/admin_role => POST ==> add new role to admin
+{ admin_id, role_id }
+
+2. http://3.92.175.77:3210/admin_role => GET ==> get all admin Roles
+
+
+3. http://3.92.175.77:3210/admin_role/:id => GET => get one adminRoles
+
+4. http://3.92.175.77:3210/admin_role/:id => PUT => update adminRoles
+
+5. http://3.92.175.77:3210/admin_roles/:id => DELETE => delete admin role
+
+=====================================================================
+
+
+1. http://3.92.175.77:3210/post => POST ==> add new post
+{ title, fulltext }
+
+2. http://3.92.175.77:3210/post => GET ==> get all posts
+
+3. http://3.92.175.77:3210/post/:id => GET ==> get one post
+
+4. http://3.92.175.77:3210/post/:id => PUT ==> update post
+
+5. http://3.92.175.77:3210/post/:id => DELETE ==> delete post
+
+=====================================================================
