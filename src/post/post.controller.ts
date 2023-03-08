@@ -7,17 +7,24 @@ import {
   Param,
   Delete,
   Put,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
-import { cookieGetter } from '../decorators/cookieGetter.decorator';
 import { PostService } from './post.service';
+import { FileInterceptor } from '@nestjs/platform-express';
 
-@Controller('post')
+@Controller('posts')
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
   @Post()
-  create(@getTokenData('ADMIN') adminData: string, @Body() createPostDto) {
-    return this.postService.create(createPostDto, adminData);
+  @UseInterceptors(FileInterceptor('image'))
+  create(
+    @getTokenData('ADMIN') adminData: string,
+    @Body() createPostDto,
+    @UploadedFile() image,
+  ) {
+    return this.postService.create(createPostDto, adminData, image);
   }
 
   @Get()
@@ -31,12 +38,14 @@ export class PostController {
   }
 
   @Put(':id')
+  @UseInterceptors(FileInterceptor('image'))
   update(
     @Param('id') id: string,
     @Body() updatePostDto,
     @getTokenData('ADMIN') adminData: string,
+    @UploadedFile() image,
   ) {
-    return this.postService.update(+id, updatePostDto, adminData);
+    return this.postService.update(+id, updatePostDto, adminData, image);
   }
 
   @Delete(':id')

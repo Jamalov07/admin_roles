@@ -1,15 +1,21 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { FilesService } from '../files/files.service';
 import { Post } from './post.model';
 
 @Injectable()
 export class PostService {
-  constructor(@InjectModel(Post) private postRepo: typeof Post) {}
+  constructor(
+    @InjectModel(Post) private postRepo: typeof Post,
+    private readonly fileService: FilesService,
+  ) {}
 
-  async create(postBody, adminData) {
+  async create(postBody, adminData, image) {
+    const fileName = await this.fileService.createFile(image);
     const newpost = await this.postRepo.create({
       ...postBody,
       admin_id: adminData.id,
+      image: fileName,
     });
     return newpost;
   }
@@ -35,14 +41,20 @@ export class PostService {
     return post;
   }
 
-  async update(id: number, postBody, adminData) {
+  async update(id: number, postBody, adminData, image) {
     const post = await this.postRepo.findOne({
       where: { id },
     });
     if (!post) {
       throw new BadRequestException('post not found');
     }
-    post.update(postBody);
+    if (image) {
+      await this.fileService.deleteFile(post.image);
+      const fileName = await this.fileService.createFile(image);
+      post.update({ ...postBody, image: fileName });
+    } else {
+      post.update(postBody);
+    }
     return post;
   }
 
@@ -54,6 +66,7 @@ export class PostService {
     if (!post) {
       throw new BadRequestException('post not found');
     }
+    await this.fileService.deleteFile(post.image);
     await this.postRepo.destroy({ where: { id } });
     return post;
   }

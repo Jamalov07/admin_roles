@@ -101,8 +101,26 @@ export class AdminService {
       });
     }
     admin.update(adminBody);
-    return admin;
-  }
+
+    let adminRoleList = [];
+    admin.roles.forEach((role) => {
+      adminRoleList.push(role.role_id);
+    });
+
+    const token = await this.getTokens(admin.id, admin.roles);
+    const response = {
+      admin: {
+        id: admin.id,
+        username: admin.username,
+        fullname: admin.fullname,
+        roles: adminRoleList,
+        posts: admin.posts,
+        token,
+      },
+    };
+
+    return response;
+}
 
   async remove(id: number) {
     const admin = await this.adminRepo.findOne({
@@ -130,13 +148,21 @@ export class AdminService {
     if (!isMatch) {
       throw new UnauthorizedException('User not registered2');
     }
+    let adminRoleList = [];
+    admin.roles.forEach((role) => {
+      adminRoleList.push(role.role_id);
+    });
 
     const token = await this.getTokens(admin.id, admin.roles);
     const response = {
-      admin: { id: admin.id, username: admin.username },
-      roles: admin.roles,
-      posts: admin.posts,
-      token,
+      admin: {
+        id: admin.id,
+        username: admin.username,
+        fullname: admin.fullname,
+        roles: adminRoleList,
+        posts: admin.posts,
+        token,
+      },
     };
 
     return response;
@@ -154,8 +180,6 @@ export class AdminService {
         expiresIn: process.env.REFRESH_TOKEN_TIME,
       }),
     ]);
-    return {
-      refresh_token: refreshToken,
-    };
+    return refreshToken;
   }
 }

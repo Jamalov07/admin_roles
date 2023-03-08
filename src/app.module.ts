@@ -9,6 +9,9 @@ import { Post } from './post/post.model';
 import { Role } from './role/role.model';
 import { RoleModule } from './role/role.module';
 import { PostModule } from './post/post.module';
+import { Category } from './category/category.model';
+import { CategoryModule } from './category/category.module';
+import { FilesModule } from './files/files.module';
 
 @Module({
   imports: [
@@ -22,7 +25,7 @@ import { PostModule } from './post/post.module';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [Admin, Admin_Role, Post, Role],
+      models: [Admin, Admin_Role, Post, Role, Category],
       autoLoadModels: true,
       logging: false,
     }),
@@ -30,6 +33,8 @@ import { PostModule } from './post/post.module';
     Admin_RoleModule,
     PostModule,
     RoleModule,
+    CategoryModule,
+    FilesModule,
   ],
   controllers: [],
   providers: [],
